@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  document_engine:
+    image: pspdfkit/document-engine:1.10.1
+    environment:
+      PGUSER: de-user
+      PGPASSWORD: password
+      PGDATABASE: document-engine
+      PGHOST: db
+      PGPORT: 5432
+      API_AUTH_TOKEN: secret
+      SECRET_KEY_BASE: secret-key-base
+      ACTIVATION_KEY: Gmhd7cqzMEkLht5z-LcUTHbg2EBv20Izq_nhbNCGc1NfmbfEFdpHbYvJWmDMGZZqFXxHY0v2csBwouYHIaghAgsSMjVHN6oCmnfBOequDW7YsduY4iiqFZh_jpyBt-tQ7NBO1lwBqSb4kOI02_NdOEc1QnJ_1z7utzlGLv5fYo4SQULpTOSKL483-dJNJkIzXcND6AU0jbNLAOjg_xVATgH0VmAD8yCKhoKgu3XIYQ759l17ZsTao9W_O11_bNZvsEZlzsbar6Sn8TLI5_wVyMcVkYsDQn8gUc-H9i1Gx0Awny_jq7hyd4je9P6okLxDt_UOoPo2GSrhLrwbiFfyquLckLG-OLS8WlYjEhKsnSBpsWAZBNcIYXAneE15dGgLCyfIl2kr16Exm88hBRrRgaTTxGKdR7sB4rXwunW-UcVYhvdMjTRPT80OlbdBYNcaYuPVvVzmDMUy6edxDw0vLylNMDZFKm_WWgP1
+      JWT_PUBLIC_KEY: |
+        -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2gzhmJ9TDanEzWdP1WG+
+        0Ecwbe7f3bv6e5UUpvcT5q68IQJKP47AQdBAnSlFVi4X9SaurbWoXdS6jpmPpk24
+        QvitzLNFphHdwjFBelTAOa6taZrSusoFvrtK9x5xsW4zzt/bkpUraNx82Z8MwLwr
+        t6HlY7dgO9+xBAabj4t1d2t+0HS8O/ed3CB6T2lj6S8AbLDSEFc9ScO6Uc1XJlSo
+        rgyJJSPCpNhSq3AubEZ1wMS1iEtgAzTPRDsQv50qWIbn634HLWxTP/UH6YNJBwzt
+        3O6q29kTtjXlMGXCvin37PyX4Jy1IiPFwJm45aWJGKSfVGMDojTJbuUtM+8P9Rrn
+        AwIDAQAB
+        -----END PUBLIC KEY-----
+      JWT_ALGORITHM: RS256
+      DASHBOARD_USERNAME: dashboard
+      DASHBOARD_PASSWORD: secret
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: de-user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: document-engine
+      POSTGRES_INITDB_ARGS: --data-checksums
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
